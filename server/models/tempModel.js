@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const tempUserSchema = new mongoose.Schema({
     email : {type : String, required : true, unique : true},
     password : {type : String, required : true},
     userType : {type : String, enum : ['student', 'tutor'], required : true},
@@ -8,6 +8,6 @@ const userSchema = new mongoose.Schema({
     otp : String
 })
 
-const UserModel = mongoose.model('user', userSchema);
+const TempUserModel = mongoose.model('TempUser', tempUserSchema);
 
-module.exports = UserModel;
+module.exports = TempUserModel;

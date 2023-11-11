@@ -4,6 +4,7 @@ const validator = require('../middlewares/validator');
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const BlacklistModel = require('../models/blacklistModel');
 require('dotenv').config();
 
 userRouter.post('/register', validator, async (req, res) => {
@@ -31,11 +32,33 @@ userRouter.post('/login', async (req, res) => {
             }
             else{
                 const token = jwt.sign({userId : user._id, email : user.email}, process.env.secretKey, {expiresIn : '2d'});
+                user.isVerified = true;
+                await user.save();
                 res.status(200).send({msg : 'User logged in successfully', token, email : user.email});
             }
         }
     } catch (error) {
         res.status(400).send({ msg: error.message });
+    }
+})
+
+userRouter.get('/logout', async(req, res) => {
+    const {email} = req.body;
+    const token = req.headers?.authorization?.split(' ')[1];
+    try {
+        const loggedInUser = await UserModel.findOne({email, isVerified : true});
+        if(!loggedInUser){
+            return res.status(400).send({msg : 'User not found, please login again!'});
+        }
+
+        loggedInUser.isVerified = false;
+        await loggedInUser.save();
+
+        const blacklistUser = await BlacklistModel.create({token});
+
+        res.status(200).send({msg : 'User logged out successfully'});
+    } catch (error) {
+        res.status(400).send({msg : error.message});
     }
 })
 

@@ -3,6 +3,7 @@ const connection = require('./config/db');
 const app = express();
 const cors = require('cors');
 const userRouter = require('./routes/userRoute');
+const doubtRouter = require('./routes/doubtRoute');
 require('dotenv').config();
 
 app.use(express.json());
@@ -11,6 +12,7 @@ app.use(cors({
     credentials : true
 }))
 app.use('/api/auth', userRouter);
+app.use('/api/doubt', doubtRouter);
 
 app.get('/', async (req, res) => {
     try {

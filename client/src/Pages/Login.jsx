@@ -4,12 +4,15 @@ import { Box, Heading, Input, Button, Text, Flex, useToast, Divider, AbsoluteCen
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
 import vector4 from '../Assets/vector4.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/authReducer/action';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Login = () => {
     const navigate = useNavigate();
     const [inputType, setInputType] = useState(false);
-    const toast = useToast();
-    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch();
+    const {registerErr, isAuth, isLoading} = useSelector(store => store.authReducer);
     const [formDetails, setFormDetails] = useState({
         email: '',
         password: '',
@@ -24,6 +27,12 @@ const Login = () => {
         setFormDetails({ ...formDetails, [name]: value });
     }
 
+    useEffect(() => {
+        if(formDetails.email.includes('.com') && formDetails.email.includes('@')){
+            localStorage.setItem('confirmEmail', formDetails.email);
+        }
+    }, [formDetails.email])
+
     const handleFocus = (name) => {
         setFocusedInput(name);
     };
@@ -34,12 +43,54 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!formDetails.email.trim()) {
+            emailInputRef.current?.focus();
+            setFocusedInput('email');
+            return;
+        }
+
+        if (!formDetails.password.trim()) {
+            passwordInputRef.current?.focus();
+            setFocusedInput('password');
+            return;
+        }
+
+        const newUser = { ...formDetails };
+
+        dispatch(login(newUser));
+
+        isAuth && setFormDetails({
+            email: '',
+            password: ''
+        })
+    }
+
+    useEffect(() => {
+        if(isAuth && !registerErr){
+            toast.success('User logged in successfully');
+
+            localStorage.removeItem('confirmEmail');
+            setTimeout(() => {
+                navigate('/doubt');
+                window.location.reload();
+            }, 2000)
+        }
+        else if(registerErr){
+            toast.error(registerErr);
+        }
+    }, [isAuth, registerErr])
+
+    const handleConfirmEmail = () => {
+        localStorage.setItem('confirmEmail', formDetails.email);
+        navigate('/confirmEmail');
     }
 
     return (
         <Box p={'20px 40px'} h={'100vh'}>
+            <Toaster toastOptions={{duration : 3000}}/>
             <Flex ml={'20px'} w={'100%'} flexDirection={{ base: 'column', sm: 'column', md: 'row', lg: 'row', xl: 'row', '2xl': 'row' }} h={'100%'} position={'relative'}>
-                <Button onClick={() => navigate('/signup')} p={'15px 30px'} _hover={'none'} border='2px solid #90ca5e' color={'#5c8a34'} position={'absolute'} bg={'transparent'} top={'10px'} right={'55%'}>Sign up</Button>
+                <Button onClick={() => navigate('/signup')} p={'15px 30px'} _hover={'none'} color={'white'} position={'absolute'} bg={'#90ca5e'} top={'10px'} right={'55%'}>Sign up</Button>
                 <VStack w={{ base: '100%', sm: '100%', md: '100%', lg: '50%', xl: '50%', '2xl': '50%' }} bg={'rgb(240 240 240)'} borderRadius={'40px 0 0 40px'} alignItems={'center'} justifyContent={'center'}>
                     <Flex w={'100%'} flexDir={'column'} alignItems={'center'}>
                         <form onSubmit={handleSubmit} id='signup-form'>
@@ -51,9 +102,12 @@ const Login = () => {
                                     {inputType ? <Button h={'30px'} onClick={() => setInputType(false)} bg={'white'}><AiOutlineEyeInvisible size={'16px'} /></Button> :
                                         <Button h={'30px'} onClick={() => setInputType(true)} bg={'white'}><AiOutlineEye size={'16px'} /></Button>}
                                 </Box>
-                                {/* {registerErr && <Box p={'15px 10px 10px 10px'} textAlign={'center'} color={'red'} fontSize={'13px'}>
-                                <Text>{registerErr}</Text>
-                            </Box>} */}
+                                {registerErr && <Box p={'15px 10px 10px 10px'} textAlign={'center'} color={'red'} fontSize={'13px'}>
+                                    <Text>{registerErr}</Text>
+                                </Box>}
+                                {formDetails.email.includes('.com') && formDetails.email.includes('@') && <Flex onClick={handleConfirmEmail} justifyContent={'center'} color={'blue.500'} _hover={{ textDecoration: 'underline', cursor: 'pointer' }}>
+                                    <Text>Forgot Password ?</Text>
+                                </Flex>}
                             </Box>
                             <Button isLoading={isLoading === true} loadingText={'Submitting'} type='submit' bg={'#90ca5e'} color={'white'} p={'27px 15px'} _hover={{ opacity: '0.8' }} borderRadius={'8px'} w={'100%'}>Login</Button>
                         </form>

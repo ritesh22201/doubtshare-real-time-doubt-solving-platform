@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import AllRoutes from './Routes/AllRoutes';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -22,10 +21,10 @@ function App() {
       })
       .then(res => {
           setResponse(res.data.user);
-          if(res.data.user.grade){
-            navigate('/doubt');
+          if(res.data.user.grade && location.pathname === '/classes'){
+            navigate('/dashboard');
           }
-          else{
+          else if(!res.data.user.grade){
             navigate('/classes')
           }
       })
@@ -37,7 +36,13 @@ function App() {
 
   useEffect(() => {
     if (data.token && (location.pathname === '/login' || location.pathname === '/signup')) {
-      navigate('/doubt');
+      navigate('/dashboard');
+    }
+  }, [])
+
+  useEffect(() => {
+    if(location.pathname === '/doubt'){
+      navigate('/dashboard')
     }
   }, [])
 
@@ -55,7 +60,7 @@ function App() {
 
   useEffect(() => {
     if (data.token && (location.pathname === '/login' || location.pathname === '/signup')) {
-      navigate('/doubt');
+      navigate('/dashboard');
     }
   }, [location.pathname, data.token])
 

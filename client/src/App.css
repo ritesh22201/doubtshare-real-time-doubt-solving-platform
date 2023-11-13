@@ -39,3 +39,14 @@
 .subjects > div:nth-child(4){
   width: 15%;
 }
+
+.navigate:hover{
+  cursor: pointer;
+}
+
+.navigate {
+  font-size: 30px;
+  background-color: #90ca5e;
+  padding: 8px;
+  border-radius: 50%;
+}

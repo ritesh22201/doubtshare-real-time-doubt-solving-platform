@@ -4,11 +4,14 @@ import Home from '../Pages/Home';
 import Signup from '../Pages/Signup';
 import Login from '../Pages/Login';
 import Verify from '../Pages/Verify';
-import Doubt from '../Pages/Doubt';
+import Dashboard from '../Pages/Dashboard';
 import PrivateRoute from './PrivateRoute';
 import ConfirmEmail from '../Pages/ConfirmEmail';
 import ChangePassword from '../Pages/ChangePassword';
 import Classes from '../Pages/Classes';
+import Doubts from '../Pages/Doubts';
+import Chats from '../Pages/Chats';
+import Profile from '../Pages/Profile';
 
 const AllRoutes = () => {
   return (
@@ -22,8 +25,17 @@ const AllRoutes = () => {
         <Route path='/classes' element={<PrivateRoute>
             <Classes/>
         </PrivateRoute>}/>
-        <Route path='/doubt' element={<PrivateRoute>
-            <Doubt/>
+        <Route path='/dashboard' element={<PrivateRoute>
+            <Dashboard/>
+        </PrivateRoute>}/>
+        <Route path='/doubts' element={<PrivateRoute>
+            <Doubts/>
+        </PrivateRoute>}/>
+        <Route path='/chats' element={<PrivateRoute>
+            <Chats/>
+        </PrivateRoute>}/>
+        <Route path='/profile' element={<PrivateRoute>
+            <Profile/>
         </PrivateRoute>}/>
     </Routes>
   )

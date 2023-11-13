@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useState, useRef, useEffect, useContext } from 'react';
 import { Box, Heading, Input, Button, Text, Flex, useToast, Divider, AbsoluteCenter, Image, Select, VStack } from '@chakra-ui/react';
 import { AiOutlineEyeInvisible, AiOutlineEye } from 'react-icons/ai';
@@ -126,4 +126,4 @@ const Login = () => {
     )
 }
 
-export default Login;
+export default memo(Login);

@@ -1,4 +1,4 @@
-import { AUTH_REQ, AUTH_REQ_FAILURE, AUTH_REQ_SUCCESS, CHANGE_PASSWORD, FORGET_PASSWORD, LOGIN_REQ_SUCCESS, RESEND_OTP_SUCCESS, VERIFY_FORGET_OTP, VERIFY_OTP_SUCCESS } from "./actionTypes";
+import { AUTH_REQ, AUTH_REQ_FAILURE, AUTH_REQ_SUCCESS, CHANGE_PASSWORD, FORGET_PASSWORD, LOGIN_REQ_SUCCESS, LOGOUT_REQ_SUCCESS, RESEND_OTP_SUCCESS, VERIFY_FORGET_OTP, VERIFY_OTP_SUCCESS } from "./actionTypes";
 
 const initialState = {
     isLoading : false,
@@ -9,7 +9,8 @@ const initialState = {
     verifyOtpMsg : '',
     forgetPassMsg : '',
     changePassMsg : '',
-    verifyForgetOtpMsg : ''
+    verifyForgetOtpMsg : '',
+    logoutMsg : ''
 }
 
 export const reducer = (state = initialState, {type, payload}) => {
@@ -25,7 +26,8 @@ export const reducer = (state = initialState, {type, payload}) => {
                 isRegistered : '',
                 verifyOtpMsg : '',
                 forgetPassMsg : '',
-                changePassMsg : ''
+                changePassMsg : '',
+                logoutMsg : ''
             }
         }
 
@@ -80,6 +82,15 @@ export const reducer = (state = initialState, {type, payload}) => {
                 isLoading : false,
                 isError : false,
                 isAuth : true
+            }
+        }
+
+        case LOGOUT_REQ_SUCCESS : {
+            return  {
+                ...state,
+                isLoading : false,
+                isError : false,
+                logoutMsg : payload
             }
         }
 

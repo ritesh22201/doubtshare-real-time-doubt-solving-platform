@@ -8,6 +8,7 @@ import Doubt from '../Pages/Doubt';
 import PrivateRoute from './PrivateRoute';
 import ConfirmEmail from '../Pages/ConfirmEmail';
 import ChangePassword from '../Pages/ChangePassword';
+import Classes from '../Pages/Classes';
 
 const AllRoutes = () => {
   return (
@@ -18,6 +19,9 @@ const AllRoutes = () => {
         <Route path='/verify' element={<Verify/>}/>
         <Route path='/confirmEmail' element={<ConfirmEmail/>}/>
         <Route path='/changePassword' element={<ChangePassword/>}/>
+        <Route path='/classes' element={<PrivateRoute>
+            <Classes/>
+        </PrivateRoute>}/>
         <Route path='/doubt' element={<PrivateRoute>
             <Doubt/>
         </PrivateRoute>}/>

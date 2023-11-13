@@ -57,11 +57,7 @@ const Signup = () => {
             return;
         }
 
-        if (!formDetails.userType.trim()) {
-            return;
-        }
-        console.log(formDetails)
-        const newUser = { ...formDetails };
+        const newUser = formDetails.userType ? { ...formDetails } : {email : formDetails.email, password : formDetails.password};
         dispatch(signup(newUser));
 
         localStorage.setItem('isRegistered', isRegistered);

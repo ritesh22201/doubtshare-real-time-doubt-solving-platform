@@ -22,3 +22,20 @@
 #signup-form input, #signup-form select {
   background-color: white;
 }
+
+.subjects > div{
+  cursor: pointer;
+}
+
+.subjects > div:hover{
+  background-color: #f0f0f0;
+}
+
+.subjects > *{
+  width: 14%;
+  font-size: 13px;
+}
+
+.subjects > div:nth-child(4){
+  width: 15%;
+}

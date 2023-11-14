@@ -7,7 +7,9 @@ const Chats = () => {
         <Flex>
             <Sidebar />
             <Box w={'90%'} position={'absolute'} right={'0px'}>
-                Chats
+                <Flex>
+                    
+                </Flex>
             </Box>
         </Flex>
     )

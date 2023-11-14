@@ -35,7 +35,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
-    const { doubts, isDeleted, errorMsg, isUpdated} = useSelector(store => store.doubtReducer);
+    const { doubts, isDeleted, errorMsg, isUpdated } = useSelector(store => store.doubtReducer);
     const navigate = useNavigate();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -52,13 +52,13 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        if(isDeleted){
+        if (isDeleted) {
             toast.success(isDeleted);
         }
-        else if(isUpdated){
+        else if (isUpdated) {
             toast.success(isUpdated);
         }
-        else if(errorMsg){
+        else if (errorMsg) {
             toast.error(errorMsg);
         }
 
@@ -69,7 +69,7 @@ const Dashboard = () => {
         <Flex>
             <Sidebar />
             <Box w={'90%'} position={'absolute'} right={'0px'}>
-                <Toaster toastOptions={{duration : 3000}}/>
+                <Toaster toastOptions={{ duration: 3000 }} />
                 <ModalPost isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
                 <Flex position={'sticky'} top={'0px'} zIndex={'overlay'} bg={'white'} p={'7px 1px'} w={'95%'} m={'8px 0 8px 30px'} pr={'5px'} fontSize={'23px'} justifyContent={'space-between'} alignItems={'center'}>
                     <Heading fontSize={'23px'}>Frequently Asked</Heading>
@@ -181,7 +181,7 @@ const Dashboard = () => {
                     </Box>
                 </Flex>
                 <Heading m={'30px 0 10px 30px'} fontSize={'23px'}>My Doubts</Heading>
-                <Flex w={'100%'} m={'20px 0'} gap={'10px'} p={'0 30px'} >
+                {doubts.length > 0 ? <Flex w={'100%'} m={'20px 0'} gap={'10px'} p={'0 30px'} >
                     {doubts?.slice(0, 2)?.map(el => {
                         return <Flex gap={'15px'} w={'50%'} key={el._id} bg={'#f0f0f0'} p={'10px'} borderRadius={'8px'}>
                             <Image borderRadius={'8px'} h={'120px'} w={'30%'} src={el.subject === 'computer science' ? programming : el.subject === 'biology' ? biology : el.subject === 'mathematics' ? maths : el.subject === 'chemistry' ? chemistry : el.subject === 'english' ? english : el.subject === 'geography' ? geography : history} />
@@ -205,9 +205,16 @@ const Dashboard = () => {
                         </Flex>
                     })}
                 </Flex>
-                <Box pb={'20px'} textAlign={'center'}>
+                    : <Grid placeItems={'center'} textAlign={'center'}>
+                        <Box>
+                            <Heading size={'sm'} textTransform={'uppercase'}>Post your first doubt</Heading>
+                            <Button mt={'10px'} onClick={onOpen} h={'32px'} bg={'#90ca5e'} p={'18px 32px'} color={'white'} borderRadius={'23px'} _hover={{ opacity: '0.8' }} _active={'none'}>+ Post Doubt</Button>
+                        </Box>
+                    </Grid>
+                }
+                {doubts.length > 0 && <Box pb={'20px'} textAlign={'center'}>
                     <Button onClick={() => navigate('/doubts')} h={'32px'} bg={'#90ca5e'} p={'18px 32px'} color={'white'} borderRadius={'23px'} _hover={{ opacity: '0.8' }} _active={'none'}>View More</Button>
-                </Box>
+                </Box>}
             </Box>
         </Flex>
     )

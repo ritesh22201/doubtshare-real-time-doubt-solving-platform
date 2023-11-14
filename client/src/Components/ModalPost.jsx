@@ -97,8 +97,8 @@ const ModalPost = ({ isOpen, onClose, onOpen }) => {
                         onClick={() => handleGrades(i, el.language)}
                         variant={'outline'}
                         fontWeight={'bold'}
-                        color={langId === i ? '#90ca5e' : 'black'}
-                        outline={langId === i ? '2px solid #90ca5e' : '1px solid black'}
+                        color={langId === i && langVal ? '#90ca5e' : 'black'}
+                        outline={langId === i && langVal ? '2px solid #90ca5e' : '1px solid black'}
                         key={el.id}>
                         {el.language === 'hindi' ? 'हिंदी' : el.language === 'english' ? 'English' : el.language === 'tamil' ? 'தமிழ்' : el.language === 'telugu' ? 'తెలుగు' : el.language === 'kannada' ? 'ಕನ್ನಡ' : el.language === 'bengali' ? 'বাংলা' : el.language === 'marathi' ? 'मराठी' : el.language === 'gujrati' ? 'ગુજરાતી' : el.language === 'malayalam' ? 'മലയാളം' : 'ਪੰਜਾਬੀ'}
                       </Button>

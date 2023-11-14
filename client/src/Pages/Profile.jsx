@@ -53,6 +53,9 @@ const Profile = () => {
     useEffect(() => {
         if(isUpdated){
             toast.success(isUpdated);
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000)
         }
         dispatch(getSingleUser({email : data?.email}));
     }, [isUpdated])

@@ -64,7 +64,7 @@ const Doubts = () => {
                     <Heading color={'gray.600'} fontSize={'20px'} m={'10px 0 20px 0'}>MY DOUBTS</Heading>
                     <Button onClick={onOpen} _hover={{ opacity: '0.8' }} h={'33px'} bg={'#90ca5e'} color={'white'}>+ Post Doubt</Button>
                 </Flex>
-                <Grid templateColumns={'repeat(2, 1fr)'} gap={'15px'} >
+                {doubts.length > 0 ? <Grid templateColumns={'repeat(2, 1fr)'} gap={'15px'} >
                     {doubts?.map(el => {
                         return <Flex gap={'15px'} key={el._id} bg={'#f0f0f0'} p={'10px'} borderRadius={'8px'}>
                             <Image borderRadius={'8px'} h={'120px'} w={'30%'} src={el.subject === 'computer science' ? programming : el.subject === 'biology' ? biology : el.subject === 'mathematics' ? maths : el.subject === 'chemistry' ? chemistry : el.subject === 'english' ? english : el.subject === 'geography' ? geography : history} />
@@ -88,6 +88,13 @@ const Doubts = () => {
                         </Flex>
                     })}
                 </Grid>
+                    : <Grid minH={'80vh'} placeItems={'center'} textAlign={'center'}>
+                        <Box>
+                            <Heading size={'md'} textTransform={'uppercase'}>Post your first doubt</Heading>
+                            <Button mt={'10px'} onClick={onOpen} h={'32px'} bg={'#90ca5e'} p={'18px 32px'} color={'white'} borderRadius={'23px'} _hover={{ opacity: '0.8' }} _active={'none'}>+ Post Doubt</Button>
+                        </Box>
+                    </Grid>
+                }
             </Box>
         </Flex>
     )

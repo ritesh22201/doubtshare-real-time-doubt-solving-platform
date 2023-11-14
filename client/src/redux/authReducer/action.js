@@ -1,4 +1,4 @@
-import { AUTH_REQ, AUTH_REQ_FAILURE, AUTH_REQ_SUCCESS, CHANGE_PASSWORD, FORGET_PASSWORD, LOGIN_REQ_SUCCESS, LOGOUT_REQ_SUCCESS, VERIFY_FORGET_OTP, VERIFY_OTP_SUCCESS } from "./actionTypes";
+import { AUTH_REQ, AUTH_REQ_FAILURE, AUTH_REQ_SUCCESS, CHANGE_PASSWORD, FORGET_PASSWORD, GET_SINGLE_PROFILE, LOGIN_REQ_SUCCESS, LOGOUT_REQ_SUCCESS, UPDATE_PROFILE, VERIFY_FORGET_OTP, VERIFY_OTP_SUCCESS } from "./actionTypes";
 import axios from 'axios';
 
 const data = JSON.parse(localStorage.getItem('login-token')) || {};
@@ -102,6 +102,42 @@ export const logout = (email) => async (dispatch) => {
         }
     } catch (error) {
         console.log(error.message)
+        dispatch({ type: AUTH_REQ_FAILURE, payload: error.response.data.msg });
+    }
+}
+
+export const updateProfile = (idVal, userDetails) => async (dispatch) => {
+
+    dispatch({ type: AUTH_REQ });
+    try {
+        let response = await axios.put(`https://doubts-cleared.onrender.com/api/auth/updateProfile/${idVal.id}`, {...userDetails}, {
+            headers: {
+                'Authorization': `Bearer ${data.token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.data) {
+            dispatch({ type: UPDATE_PROFILE, payload: response.data.msg });
+        }
+    } catch (error) {
+        console.log(error.message)
+        dispatch({ type: AUTH_REQ_FAILURE, payload: error.response.data.msg });
+    }
+}
+
+export const getSingleUser = (payloadData) => async(dispatch) => {
+    try {
+        const response = await axios.get(`https://doubts-cleared.onrender.com/api/auth/users/${payloadData.email}`, {
+            headers: {
+                'Authorization': `Bearer ${data.token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (response.data.user) {
+            dispatch({type : GET_SINGLE_PROFILE, payload : response.data.user});
+        }
+    } catch (error) {
         dispatch({ type: AUTH_REQ_FAILURE, payload: error.response.data.msg });
     }
 }

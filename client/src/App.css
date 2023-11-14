@@ -50,3 +50,35 @@
   padding: 8px;
   border-radius: 50%;
 }
+
+.input-container {
+  position: relative;
+  width: 80%; 
+  margin-top: 30px;
+  border-radius: 3px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccbcb;
+  border-radius: 5px;
+}
+
+input + label {
+  position: absolute;
+  top: -10px; 
+  left: 10px;
+  background-color: white;
+  padding: 0 5px;
+  font-size: 12px;
+  color: #777;
+}
+
+input:focus + label {
+  top: -15px; 
+  background-color: #fff;
+  color: #777;
+  font-size: 12px;
+  transition: 0.3s;
+}

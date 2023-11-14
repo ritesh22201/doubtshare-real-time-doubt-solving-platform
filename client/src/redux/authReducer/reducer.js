@@ -1,4 +1,4 @@
-import { AUTH_REQ, AUTH_REQ_FAILURE, AUTH_REQ_SUCCESS, CHANGE_PASSWORD, FORGET_PASSWORD, LOGIN_REQ_SUCCESS, LOGOUT_REQ_SUCCESS, RESEND_OTP_SUCCESS, VERIFY_FORGET_OTP, VERIFY_OTP_SUCCESS } from "./actionTypes";
+import { AUTH_REQ, AUTH_REQ_FAILURE, AUTH_REQ_SUCCESS, CHANGE_PASSWORD, FORGET_PASSWORD, GET_SINGLE_PROFILE, LOGIN_REQ_SUCCESS, LOGOUT_REQ_SUCCESS, RESEND_OTP_SUCCESS, UPDATE_PROFILE, VERIFY_FORGET_OTP, VERIFY_OTP_SUCCESS } from "./actionTypes";
 
 const initialState = {
     isLoading : false,
@@ -10,7 +10,9 @@ const initialState = {
     forgetPassMsg : '',
     changePassMsg : '',
     verifyForgetOtpMsg : '',
-    logoutMsg : ''
+    logoutMsg : '',
+    isUpdated : '',
+    user: {}
 }
 
 export const reducer = (state = initialState, {type, payload}) => {
@@ -27,7 +29,8 @@ export const reducer = (state = initialState, {type, payload}) => {
                 verifyOtpMsg : '',
                 forgetPassMsg : '',
                 changePassMsg : '',
-                logoutMsg : ''
+                logoutMsg : '',
+                isUpdated : ''
             }
         }
 
@@ -91,6 +94,24 @@ export const reducer = (state = initialState, {type, payload}) => {
                 isLoading : false,
                 isError : false,
                 logoutMsg : payload
+            }
+        }
+
+        case UPDATE_PROFILE : {
+            return  {
+                ...state,
+                isLoading : false,
+                isError : false,
+                isUpdated : payload
+            }
+        }
+
+        case GET_SINGLE_PROFILE : {
+            return  {
+                ...state,
+                isLoading : false,
+                isError : false,
+                user : payload
             }
         }
 

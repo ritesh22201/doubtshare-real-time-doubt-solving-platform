@@ -47,6 +47,12 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if(location.pathname === '/doubt'){
+      navigate('/dashboard')
+    }
+  }, [location.pathname])
+
+  useEffect(() => {
     if((!email && !confirmEmail) && (location.pathname === '/verify' || location.pathname === '/changePassword')){
       navigate('/login');
     }

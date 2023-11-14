@@ -6,7 +6,7 @@ A real-time doubt solving platform application built using React.js, Redux.js, N
 
 ## Live Demo Link
 
-![Live Link](https://drive.google.com/file/d/1wqqV2yJbsP2_tSA6hvhZmMTbUpAx415C/view?usp=sharing)
+[Live Link](https://drive.google.com/file/d/1wqqV2yJbsP2_tSA6hvhZmMTbUpAx415C/view?usp=sharing)
 
 ## Table of Contents
 

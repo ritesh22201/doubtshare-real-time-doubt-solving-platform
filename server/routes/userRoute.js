@@ -7,7 +7,22 @@ const jwt = require('jsonwebtoken');
 const BlacklistModel = require('../models/blacklistModel');
 const TempUserModel = require('../models/tempModel');
 const { sendOTP } = require('../utils/email');
+const auth = require('../middlewares/auth');
 require('dotenv').config();
+
+userRouter.get('/users/:email', auth, async (req, res) => {
+    try {
+        const { email } = req.params;
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found!' });
+        }
+
+        res.status(200).send({ user });
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
+    }
+})
 
 userRouter.post('/register', validator, async (req, res) => {
     const { email, password } = req.body;
@@ -17,7 +32,7 @@ userRouter.post('/register', validator, async (req, res) => {
             await TempUserModel.deleteOne({ email });
         }
 
-        const otp = Math.floor(900000 * Math.random());
+        const otp = Math.floor(100000 + Math.random() * 900000);
         await sendOTP(email, otp);
 
         const hashPassword = await bcrypt.hash(password, 10);
@@ -67,7 +82,7 @@ userRouter.post('/forgetPassword', async (req, res) => {
             return res.status(400).send({ msg: 'User not found!' });
         }
 
-        const otp = Math.floor(900000 * Math.random());
+        const otp = Math.floor(100000 + Math.random() * 900000);
         await sendOTP(email, otp);
 
         user.otp = otp;
@@ -116,8 +131,8 @@ userRouter.post('/changePassword', async (req, res) => {
         user.otp = '';
         await user.save();
 
-        res.status(200).send({msg : 'Password updated successfully'});
-        
+        res.status(200).send({ msg: 'Password updated successfully' });
+
     } catch (error) {
         res.status(400).send({ msg: error.message });
     }
@@ -136,7 +151,7 @@ userRouter.post('/login', async (req, res) => {
                 res.status(400).send({ msg: 'Incorrect password!' });
             }
             else {
-                const token = jwt.sign({ userId: user._id, email: user.email }, process.env.secretKey, { expiresIn: '2d' });
+                const token = jwt.sign({ userId: user._id, email: user.email }, process.env.secretKey, { expiresIn: '7d' });
                 user.isVerified = true;
                 await user.save();
                 res.status(200).send({ msg: 'User logged in successfully', token, email: user.email });
@@ -147,8 +162,24 @@ userRouter.post('/login', async (req, res) => {
     }
 })
 
-userRouter.get('/logout', async (req, res) => {
-    const { email } = req.body;
+userRouter.post('/addClass', auth, async (req, res) => {
+    const { email, grade } = req.body;
+    try {
+        const user = await UserModel.findOne({ email });
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found!' });
+        }
+        user.grade = grade;
+        await user.save();
+
+        res.status(200).send({ msg: 'Class added successfully', user });
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
+    }
+})
+
+userRouter.patch('/logout/:email', async (req, res) => {
+    const { email } = req.params;
     const token = req.headers?.authorization?.split(' ')[1];
     try {
         const loggedInUser = await UserModel.findOne({ email, isVerified: true });
@@ -162,6 +193,22 @@ userRouter.get('/logout', async (req, res) => {
         const blacklistUser = await BlacklistModel.create({ token });
 
         res.status(200).send({ msg: 'User logged out successfully' });
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
+    }
+})
+
+userRouter.put('/updateProfile/:id', auth, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await UserModel.findOne({ _id : id });
+        if (!user) {
+            return res.status(400).send({ msg: 'User not found!' });
+        }
+
+        const updatedUser = await UserModel.findByIdAndUpdate({_id : id}, {...req.body}, {new : true});
+        res.status(200).send({ msg: 'User updated successfully', updatedUser });
+
     } catch (error) {
         res.status(400).send({ msg: error.message });
     }
